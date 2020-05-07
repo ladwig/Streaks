@@ -1,113 +1,136 @@
 import * as React from 'react';
-import { AsyncStorage, View } from 'react-native';
+import { AsyncStorage, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AuthContext } from "./context";
+import * as firebase from 'firebase';
 
 import SignIn from './screens/SignIn';
 import Home from './screens/Home';
 import Splash from './screens/Splash';
+import CreateAccount from './screens/CreateAccount';
+import Profile from './screens/Profile';
+/* import SignUp from './screens/SignUp'; */
+import ApiKeys from './constants/ApiKeys';
 
-const Stack = createStackNavigator();
+firebase.initializeApp(ApiKeys.FirebaseConfig);
 
-export default function App({ navigation }) {
-  const [state, dispatch] = React.useReducer(
-    (prevState, action) => {
-      switch (action.type) {
-        case 'RESTORE_TOKEN':
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-          };
-        case 'SIGN_IN':
-          return {
-            ...prevState,
-            isSignout: false,
-            userToken: action.token,
-          };
-        case 'SIGN_OUT':
-          return {
-            ...prevState,
-            isSignout: true,
-            userToken: null,
-          };
+storeData = async (key, value) => {
+  try {
+    await AsyncStorage.setItem(key, value)
+  } catch(error) {
+    alert(error);
+  }
+}
+
+const AuthStack = createStackNavigator();
+const AuthStackScreen = () => (
+  <AuthStack.Navigator>
+    <AuthStack.Screen
+      name="SignIn"
+      component={SignIn}
+      options={{ title: "Sign In" }}
+    />
+    <AuthStack.Screen
+      name="CreateAccount"
+      component={CreateAccount}
+      options={{ title: "Create Account" }}
+    />
+  </AuthStack.Navigator>
+);
+
+const HomeStack = createStackNavigator();
+
+const HomeStackScreen = () => (
+  <HomeStack.Navigator>
+    <HomeStack.Screen name="Home" component={Home} />
+  </HomeStack.Navigator>
+);
+
+const Drawer = createDrawerNavigator();
+const DrawerScreen = () => (
+  <Drawer.Navigator initialRouteName="Home" drawerStyle={{
+    backgroundColor: '#fff',
+    width: 240,
+  }}>
+    <Drawer.Screen name="Home" component={HomeStackScreen} />
+    <Drawer.Screen name="Profile" component={Profile} />
+  </Drawer.Navigator>
+);
+
+const RootStack = createStackNavigator();
+const RootStackScreen = ({ userToken }) => (
+  <RootStack.Navigator headerMode="none">
+    {userToken ? (
+      <RootStack.Screen
+        name="App"
+        component={DrawerScreen}
+        options={{
+          animationEnabled: false
+        }}
+      />
+    ) : (
+      <RootStack.Screen
+        name="Auth"
+        component={AuthStackScreen}
+        options={{
+          animationEnabled: false
+        }}
+      />
+    )}
+  </RootStack.Navigator>
+);
+
+export default function App() {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [userToken, setUserToken] = React.useState(null);
+
+  const authContext = React.useMemo(() => {
+    return {
+      signIn: async data => {
+        firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
+          alert(firebasedata.user.uid);
+          storeData('userid', firebasedata.user.uid);
+          setUserToken(firebasedata.user.uid);
+          setIsLoading(false);
+        })
+          .catch(function (error) {
+            alert(error.message);
+          })
+      },
+      signUp: async data => {
+        firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
+          alert(firebasedata.user.uid)
+          storeData('userid', firebasedata.user.uid);
+          setIsLoading(false);
+          setUserToken(firebasedata.user.uid);
+        })
+          .catch(function (error) {
+            alert(error.message);
+          })
+      },
+      signOut: () => {
+        setIsLoading(false);
+        setUserToken(null);
       }
-    },
-    {
-      isLoading: true,
-      isSignout: false,
-      userToken: null,
-    }
-  );
-
-  React.useEffect(() => {
-    // Fetch the token from storage then navigate to our appropriate place
-    const bootstrapAsync = async () => {
-      let userToken;
-
-      try {
-        userToken = await AsyncStorage.getItem('userToken');
-      } catch (e) {
-        // Restoring token failed
-      }
-
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
     };
-
-    bootstrapAsync();
   }, []);
 
-  const authContext = React.useMemo(
-    () => ({
-      signIn: async data => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
+  React.useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-      },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
-      signUp: async data => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-      },
-    }),
-    []
-  );
+  if (isLoading) {
+    return <Splash />;
+  }
 
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <Stack.Navigator>
-          {state.isLoading ? (
-            // We haven't finished checking for the token yet
-            <Stack.Screen name="Splash" component={Splash} />
-          ) : state.userToken == null ? (
-            // No token found, user isn't signed in
-            <Stack.Screen
-              name="SignIn"
-              component={SignIn}
-              options={{
-                title: 'Sign in',
-            // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isSignout ? 'pop' : 'push',
-              }}
-            />
-          ) : (
-            // User is signed in
-            <Stack.Screen name="Home" component={Home} />
-          )}
-        </Stack.Navigator>
+        <RootStackScreen userToken={userToken} />
       </NavigationContainer>
     </AuthContext.Provider>
   );
