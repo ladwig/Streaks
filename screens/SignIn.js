@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Input, Button } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
-import { AuthContext } from "../context";
+import { AuthContext } from '../context';
+import Logo from '../components/Logo.js';
 
 export default function SignIn({navigation}) {
     const [email, setEmail] = React.useState('');
@@ -35,6 +36,7 @@ export default function SignIn({navigation}) {
                     colors={['rgba(255,214,171,1)', 'rgba(255,182,182,1)']}
           style={styles.gradient}
         />
+        <Logo/>
             <Input
                 placeholder="E-Mail"
                 value={email}
