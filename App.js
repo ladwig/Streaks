@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AuthContext } from "./context";
 import * as firebase from 'firebase';
+import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
+import * as eva from '@eva-design/eva';
 
 import SignIn from './screens/SignIn';
 import Home from './screens/Home';
@@ -30,7 +32,7 @@ const AuthStackScreen = () => (
     <AuthStack.Screen
       name="SignIn"
       component={SignIn}
-      options={{ title: "Sign In" }}
+      options={{ title: "Sign In", headerShown: false }}
     />
     <AuthStack.Screen
       name="CreateAccount"
@@ -129,9 +131,11 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={authContext}>
+       <ApplicationProvider {...eva} theme={eva.light} >
       <NavigationContainer>
         <RootStackScreen userToken={userToken} />
       </NavigationContainer>
+      </ApplicationProvider>
     </AuthContext.Provider>
   );
 }
