@@ -18,7 +18,9 @@ import AddNewStreak from './screens/AddNewStreak';
 
 import ApiKeys from './constants/ApiKeys';
 
-firebase.initializeApp(ApiKeys.FirebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(ApiKeys.FirebaseConfig);
+}
 
 storeData = async (key, value) => {
   try {
@@ -49,7 +51,6 @@ const HomeStack = createStackNavigator();
 const HomeStackScreen = () => (
   <HomeStack.Navigator>
     <HomeStack.Screen name="Home" component={Home} />
-    <Drawer.Screen name="AddNewStreak" component={AddNewStreak} />
   </HomeStack.Navigator>
 );
 
@@ -95,7 +96,7 @@ export default function App() {
   const authContext = React.useMemo(() => {
     return {
       signIn: async data => {
-/*         firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
+         firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
           alert(firebasedata.user.uid);
           storeData('userid', firebasedata.user.uid);
           setUserToken(firebasedata.user.uid);
@@ -103,10 +104,10 @@ export default function App() {
         })
           .catch(function (error) {
             alert(error.message);
-          }) */
+          }) 
 
-          setUserToken('test');
-          setIsLoading(false);
+/*           setUserToken('test');
+          setIsLoading(false); */
       },
       signUp: async data => {
         firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {

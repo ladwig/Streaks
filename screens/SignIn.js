@@ -11,25 +11,6 @@ export default function SignIn({navigation}) {
 
     const { signIn } = React.useContext(AuthContext);
 
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        form: {
-            width: 300,
-            marginBottom: 10
-        },
-        gradient: {
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: 1000,
-        },
-      });
-
     return (
         <View style={styles.container}>
                  <LinearGradient
@@ -65,3 +46,21 @@ export default function SignIn({navigation}) {
         </View>
     );
 }
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    form: {
+        width: 300,
+        marginBottom: 10
+    },
+    gradient: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 1000,
+    },
+  });
