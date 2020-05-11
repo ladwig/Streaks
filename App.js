@@ -5,15 +5,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AuthContext } from "./context";
 import * as firebase from 'firebase';
-import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
+import { ApplicationProvider } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 
+/* Import all Screens */
 import SignIn from './screens/SignIn';
 import Home from './screens/Home';
 import Splash from './screens/Splash';
 import CreateAccount from './screens/CreateAccount';
 import Profile from './screens/Profile';
-/* import SignUp from './screens/SignUp'; */
+import AddNewStreak from './screens/AddNewStreak';
+
 import ApiKeys from './constants/ApiKeys';
 
 firebase.initializeApp(ApiKeys.FirebaseConfig);
@@ -47,6 +49,7 @@ const HomeStack = createStackNavigator();
 const HomeStackScreen = () => (
   <HomeStack.Navigator>
     <HomeStack.Screen name="Home" component={Home} />
+    <Drawer.Screen name="AddNewStreak" component={AddNewStreak} />
   </HomeStack.Navigator>
 );
 
@@ -58,6 +61,7 @@ const DrawerScreen = () => (
   }}>
     <Drawer.Screen name="Home" component={HomeStackScreen} />
     <Drawer.Screen name="Profile" component={Profile} />
+    <Drawer.Screen name="AddNewStreak" component={AddNewStreak} />
   </Drawer.Navigator>
 );
 
@@ -91,7 +95,7 @@ export default function App() {
   const authContext = React.useMemo(() => {
     return {
       signIn: async data => {
-        firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
+/*         firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
           alert(firebasedata.user.uid);
           storeData('userid', firebasedata.user.uid);
           setUserToken(firebasedata.user.uid);
@@ -99,7 +103,10 @@ export default function App() {
         })
           .catch(function (error) {
             alert(error.message);
-          })
+          }) */
+
+          setUserToken('test');
+          setIsLoading(false);
       },
       signUp: async data => {
         firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
