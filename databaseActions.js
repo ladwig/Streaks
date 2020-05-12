@@ -1,10 +1,12 @@
 import * as firebase from 'firebase';
 
- export const storeUserData = (cluster, name, test) => {
+ export const storeUserData = (firstName, email, firstSignIn, deviceModel) => {
     const user = firebase.auth().currentUser.uid; 
-    firebase.database().ref(cluster + "/" + user).set({
-        name: name,
-        test: test
+    firebase.database().ref("users/" + user).set({
+        firstName,
+        email,
+        firstSignIn,
+        deviceModel
       }, function(error) {
         if (error) {
           // The write failed...

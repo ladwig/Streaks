@@ -7,6 +7,10 @@ import { AuthContext } from "./context";
 import * as firebase from 'firebase';
 import { ApplicationProvider } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
+import * as Device from 'expo-device';
+
+import { storeUserData } from './databaseActions';
+
 
 /* Import all Screens */
 import SignIn from './screens/SignIn';
@@ -115,6 +119,7 @@ export default function App() {
           storeData('userid', firebasedata.user.uid);
           setIsLoading(false);
           setUserToken(firebasedata.user.uid);
+          storeUserData(data.firstName, data.email, Date.now(), Device.modelName)
         })
           .catch(function (error) {
             alert(error.message);

@@ -7,6 +7,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function SignUp() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [firstName, setFirstName] = React.useState('');
+  
   const { signUp } = React.useContext(AuthContext);
 
   const styles = StyleSheet.create({
@@ -35,6 +37,12 @@ export default function SignUp() {
         style={styles.gradient}
       />
       <Input
+        placeholder="How should we call u?"
+        value={firstName}
+        onChangeText={setFirstName}
+        style={styles.form}
+      />
+      <Input
         placeholder="E-Mail"
         value={email}
         onChangeText={setEmail}
@@ -54,7 +62,7 @@ export default function SignUp() {
         secureTextEntry
         style={styles.form}
       />
-      <Button status='primary' style={styles.form} onPress={() => signUp({ email, password })}>
+      <Button status='primary' style={styles.form} onPress={() => signUp({ email, password, firstName})}>
         Create Account
     </Button>
     </View>

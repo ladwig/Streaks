@@ -3,6 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { AuthContext } from "../context";
 import { Input, Button, Toggle } from '@ui-kitten/components';
 import { storeHabitData, storeUserData } from '../databaseActions';
+import * as Device from 'expo-device';
 
 export default function AddNewStreak({navigation}) {
 
@@ -23,7 +24,7 @@ export default function AddNewStreak({navigation}) {
       <Input style ={styles.form} label="New Habit"></Input>
       <Toggle checked={checked} onChange={onCheckedChange} status="warning">
     </Toggle>
-      <Button onPress={() => storeUserData("users","Daniel","test")}>Test</Button>
+      <Button onPress={() => storeUserData("Daniel", "mail", Date.now(), Device.modelName)}>Test</Button>
       <Button onPress={() => storeHabitData("habits",test)}>Habit</Button>
     </View>
   );

@@ -15,6 +15,7 @@
     "@react-navigation/stack": "^5.2.18",
     "@ui-kitten/components": "^5.0.0-alpha.1",
     "expo": "~37.0.3",
+    "expo-device": "~2.1.0",
     "expo-linear-gradient": "~8.1.0",
     "firebase": "7.9.0",
     "react": "~16.9.0",
