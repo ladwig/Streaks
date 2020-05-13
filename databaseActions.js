@@ -29,5 +29,13 @@ import * as firebase from 'firebase';
             }
         };
     }
-
   }
+
+export const getFirstName = () => {
+    const user = firebase.auth().currentUser.uid; 
+    let data;
+    firebase.database().ref('users/' + user).on('value', (snapshot) => {
+      data = snapshot.val().firstName;
+    });
+    return data;
+}
