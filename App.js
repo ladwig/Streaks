@@ -9,7 +9,7 @@ import { ApplicationProvider } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import * as Device from 'expo-device';
 
-import { storeUserData } from './databaseActions';
+import { storeUserData, getFirstName } from './databaseActions';
 
 
 /* Import all Screens */
@@ -33,6 +33,20 @@ storeData = async (key, value) => {
     alert(error);
   }
 }
+
+retrieveData = async (key) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+    else {
+      return null;
+    }
+  } catch (error) {
+    // Error retrieving data
+  }
+};  
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
@@ -102,8 +116,12 @@ export default function App() {
       signIn: async data => {
          firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
           alert(firebasedata.user.uid);
-          storeData('userid', firebasedata.user.uid);
+          storeData('userId', firebasedata.user.uid);
           setUserToken(firebasedata.user.uid);
+          const userData = {
+            lastSignIn: Date.now()
+          }
+          storeUserData('users', userData);
           setIsLoading(false);
         })
           .catch(function (error) {
@@ -116,10 +134,17 @@ export default function App() {
       signUp: async data => {
         firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
           alert(firebasedata.user.uid)
-          storeData('userid', firebasedata.user.uid);
-          setIsLoading(false);
+          storeData('userId', firebasedata.user.uid);
           setUserToken(firebasedata.user.uid);
-          storeUserData(data.firstName, data.email, Date.now(), Device.modelName)
+          const userData = {
+            firstName: data.firstName,
+            email: data.email,
+            firstSignIn: Date.now(),
+            lastSignIn: Date.now(),
+            deviceModel: Device.modelName
+          }
+          storeUserData('users', userData);
+          setIsLoading(false);
         })
           .catch(function (error) {
             alert(error.message);

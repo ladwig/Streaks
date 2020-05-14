@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, Button, View, Dimensions } from 'react-native';
 import { AuthContext } from '../context';
 import { LineChart } from 'react-native-chart-kit';
-import HeyUser from '../components/HeyUser';
 
 export default function Profile() {
   const { signOut } = React.useContext(AuthContext);
@@ -50,7 +49,6 @@ export default function Profile() {
       borderRadius: 16
     }}
   />
-  <HeyUser></HeyUser>
     </View>
   );
   }
