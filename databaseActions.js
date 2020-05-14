@@ -30,7 +30,7 @@ import * as firebase from 'firebase';
       }
     }
 
-  export const storeHabitData = (cluster, data) => {
+  export const storeStreakData = (cluster, data) => {
     const user = firebase.auth().currentUser.uid; 
     const clusterRef = firebase.database().ref(cluster + "/" + user);
     const addNewRef = clusterRef.push();

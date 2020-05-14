@@ -5,9 +5,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AuthContext } from "./context";
 import * as firebase from 'firebase';
-import { ApplicationProvider } from '@ui-kitten/components';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+
 import * as Device from 'expo-device';
+
 
 import { storeUserData, getFirstName } from './databaseActions';
 
@@ -126,10 +129,10 @@ export default function App() {
         })
           .catch(function (error) {
             alert(error.message);
-          }) 
+          })  
 
-/*           setUserToken('test');
-          setIsLoading(false); */
+     /*      setUserToken('test');
+          setIsLoading(false);  */
       },
       signUp: async data => {
         firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
@@ -169,6 +172,7 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={authContext}>
+     <IconRegistry icons={EvaIconsPack} />
        <ApplicationProvider {...eva} theme={eva.light} >
       <NavigationContainer>
         <RootStackScreen userToken={userToken} />
