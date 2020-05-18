@@ -117,7 +117,7 @@ export default function App() {
   const authContext = React.useMemo(() => {
     return {
       signIn: async data => {
-         firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
+          firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
           alert(firebasedata.user.uid);
           storeData('userId', firebasedata.user.uid);
           setUserToken(firebasedata.user.uid);
@@ -129,10 +129,10 @@ export default function App() {
         })
           .catch(function (error) {
             alert(error.message);
-          })  
+          })   
 
-     /*      setUserToken('test');
-          setIsLoading(false);  */
+        /*   setUserToken('test');
+          setIsLoading(false);   */
       },
       signUp: async data => {
         firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {

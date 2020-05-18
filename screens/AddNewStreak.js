@@ -1,8 +1,9 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { AuthContext } from "../context";
-import { Icon, Input, Button, Toggle, IndexPath, Select, SelectItem } from '@ui-kitten/components';
+import { Input, Button, Autocomplete, AutocompleteItem, IndexPath, Select, SelectItem } from '@ui-kitten/components';
 import { storeStreakData } from '../databaseActions';
+import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 
 const SelectData = [
   'Daily',
@@ -10,40 +11,70 @@ const SelectData = [
   'Weekly',
 ];
 
-const StarIcon = (props) => (
-  <Icon {...props} name='star'/>
+const runningIcon = () => (
+  <FontAwesome5 name="running" size="32" color="blue"/>
 );
 
-const People = (props) => (
-  <Icon {...props} name='people-outline'/>
+const readingIcon = () => (
+  <FontAwesome5 name="book" size="32" color="blue"/>
 );
 
-const Brush = (props) => (
-  <Icon {...props} name='brush-outline'/>
+const smokeIcon = () => (
+  <MaterialIcons name="smoke-free" size="32" color="blue"/>
+);
+
+const starIcon = () => (
+  <FontAwesome5 name="star" size="32" color="blue"/>
 );
 
 
-const test = (row) => {
-  let test = null;
+const intervalChanger = (row) => {
+  let intervalForDB = null;
   switch(row) {
     case 0: 
-      test = 1;
+      intervalForDB = 1;
       break;
     case 1: 
-      test = 2;
+      intervalForDB = 2;
       break;
     case 2: 
-      test = 7;
+      intervalForDB = 7;
       break;
   }
-  return test;
+  return intervalForDB;
+}
+
+const getIconForWord = (word) => {
+  const inputWord = word.toLowerCase();
+  let icon = starIcon;
+   switch(inputWord) {
+     case 'running':
+        icon = runningIcon;
+        break;
+    case 'sport':
+        icon = runningIcon;
+        break;
+        case 'run':
+          icon = runningIcon;
+          break;
+      case 'smoking':
+        icon = smokeIcon;
+        break;
+      case 'no smoking':
+        icon = smokeIcon;
+        break;
+        case 'read':
+        icon = readingIcon;
+        break;
+        case 'reading':
+          icon = readingIcon;
+          break;
+   }
+   return icon;
 }
 
 export default function AddNewStreak({ navigation }) {
-
   const [streak, setStreak] = React.useState('');
-  const [interval, setInterval] = React.useState('daily');
-  const [icon, setIcon] = React.useState('');
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
 
   const displayValue = SelectData[selectedIndex.row];
@@ -54,31 +85,18 @@ export default function AddNewStreak({ navigation }) {
 
   let data = {
     streakName: streak,
-    interval: test(selectedIndex.row),
-    icon,
+    interval: intervalChanger(selectedIndex.row),
     dateAdded: Date.now(),
   }
 
   return (
     <View style={styles.container}>
       <Text>Add a new Streak</Text>
-
        <Button
           style={styles.button}
           appearance='ghost'
-          accessoryLeft={StarIcon}
+          accessoryLeft={getIconForWord(streak)}
         />
-         <Button
-          style={styles.button}
-          appearance='ghost'
-          accessoryLeft={Brush}
-        />
-         <Button
-          style={styles.button}
-          appearance='ghost'
-          accessoryLeft={People}
-        />
-
       <Input
         style={styles.form}
         label="New Streak"
@@ -94,6 +112,8 @@ export default function AddNewStreak({ navigation }) {
         onSelect={index => setSelectedIndex(index)}>
         {SelectData.map(renderOption)}
       </Select>
+
+      
 
       <Button onPress={() => storeStreakData("streaks", data)}>Save</Button>
     </View>
