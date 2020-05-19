@@ -6,8 +6,8 @@ import { AuthContext } from '../context';
 import Logo from '../components/Logo.js';
 
 export default function SignIn({navigation}) {
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [email, setEmail] = React.useState('ladwig.daniel@icloud.com');
+    const [password, setPassword] = React.useState('12345678');
 
     const { signIn } = React.useContext(AuthContext);
 

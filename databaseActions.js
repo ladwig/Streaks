@@ -45,12 +45,17 @@ import * as firebase from 'firebase';
     }
   }
 
-/* export const getFirstName = () => {
+ export const getStreakData = () => {
     const user = firebase.auth().currentUser.uid; 
-    let data;
-    firebase.database().ref('users/' + user).on('value', (snapshot) => {
-      data = snapshot.val().firstName;
-      console.log(data);
+    var query = firebase.database().ref('streaks/' + user).orderByKey();
+    query.once("value")
+      .then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+          // key will be "ada" the first time and "alan" the second time
+           console.log(childSnapshot.key);
+        console.log(childSnapshot.val());
+    
+      });
     });
-    return data;
-} */
+} 
+
