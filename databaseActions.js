@@ -47,15 +47,14 @@ import * as firebase from 'firebase';
 
  export const getStreakData = () => {
     const user = firebase.auth().currentUser.uid; 
-    var query = firebase.database().ref('streaks/' + user).orderByKey();
-    query.once("value")
-      .then(function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-          // key will be "ada" the first time and "alan" the second time
-           console.log(childSnapshot.key);
-        console.log(childSnapshot.val());
-    
-      });
+    let test = null;
+    const clusterRef = firebase.database().ref("streaks/" + user);
+     clusterRef.on("value", function (snapshot) {
+      test = snapshot.val();
+    }, function (errorObject) {
+      console.log("The read failed: " + errorObject.code);
     });
-} 
+    return test;
+}  
+
 

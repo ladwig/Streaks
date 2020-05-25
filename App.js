@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AsyncStorage, Button } from 'react-native';
+import { AsyncStorage } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -118,7 +118,7 @@ export default function App() {
     return {
       signIn: async data => {
           firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
-          alert(firebasedata.user.uid);
+        
           storeData('userId', firebasedata.user.uid);
           setUserToken(firebasedata.user.uid);
           const userData = {
@@ -136,7 +136,6 @@ export default function App() {
       },
       signUp: async data => {
         firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
-          alert(firebasedata.user.uid)
           storeData('userId', firebasedata.user.uid);
           setUserToken(firebasedata.user.uid);
           const userData = {

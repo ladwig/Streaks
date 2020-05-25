@@ -12,19 +12,19 @@ const SelectData = [
 ];
 
 const runningIcon = () => (
-  <FontAwesome5 name="running" size="32" color="blue" />
+  <FontAwesome5 name="running" size='32' color="blue" />
 );
 
 const readingIcon = () => (
-  <FontAwesome5 name="book" size="32" color="blue" />
+  <FontAwesome5 name="book" size='32' color="blue" />
 );
 
 const smokeIcon = () => (
-  <MaterialIcons name="smoke-free" size="32" color="blue" />
+  <MaterialIcons name="smoke-free" size='32' color="blue" />
 );
 
 const starIcon = () => (
-  <FontAwesome5 name="star" size="32" color="blue" />
+  <FontAwesome5 name="star" size='32' color="blue" />
 );
 
 
@@ -90,6 +90,7 @@ export default function AddNewStreak({ navigation }) {
     streakName: streak,
     interval: intervalChanger(selectedIndex.row),
     dateAdded: Date.now(),
+    counter: 0,
   }
 
   return (
