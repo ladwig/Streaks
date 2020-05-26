@@ -10,12 +10,13 @@ export default function StreakCard(props) {
       backgroundColor: "rgba(255,182,182,1)",
     },
     streakContainer: {
-      height: "45%",
+      height: 100,
+      borderBottomWidth: 1,
       width: Dimensions.get("window").width
     },
     streakProgress: {
       width: percent,
-      height: "100%",
+      height: 100,
       backgroundColor: "rgba(255,214,171,1)"
     },
   });
@@ -23,8 +24,9 @@ export default function StreakCard(props) {
     return (
       <View style={styles.container}>
       <View style={styles.streakContainer}>
+      <Text style={styles.streakName}>{props.streakName}</Text>
         <View style={styles.streakProgress}>
-        <Text style={styles.streakName}>{props.streakName}</Text>
+          {console.log(props.percent)}
         </View>
         </View>
       </View>
