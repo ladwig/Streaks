@@ -1,21 +1,5 @@
 import * as firebase from 'firebase';
 
-/*  export const storeUserData = (firstName, email, firstSignIn, deviceModel) => {
-    const user = firebase.auth().currentUser.uid; 
-    firebase.database().ref("users/" + user).set({
-        firstName,
-        email,
-        firstSignIn,
-        deviceModel
-      }, function(error) {
-        if (error) {
-          // The write failed...
-        } else {
-          // Data saved successfully!
-        }
-      });
-    } */
-
     export const storeUserData = (cluster, data) => {
       const user = firebase.auth().currentUser.uid; 
       const clusterRef = firebase.database().ref(cluster + "/" + user);
@@ -46,15 +30,26 @@ import * as firebase from 'firebase';
   }
 
  export const getStreakData = () => {
-    const user = firebase.auth().currentUser.uid; 
-    let test = null;
-    const clusterRef = firebase.database().ref("streaks/" + user);
-     clusterRef.on("value", function (snapshot) {
-      test = snapshot.val();
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    });
-    return test;
+  const user = firebase.auth().currentUser.uid; 
+  const db = firebase.database().ref('/streaks/' + user);
+  return db
+  .once("value")
+  .then(function(ref){
+    return ref.val()
+  })
 }  
 
-
+export const addOneToCounter = (streakId) => {
+  const user = firebase.auth().currentUser.uid; 
+  const db = firebase.database().ref('/streaks/' + user + "/" + streakId);
+  return db
+  .once("value")
+  .then(function(ref){
+    const counter = ref.val().counter;
+    return {
+      counter: counter + 1
+    }
+  }).then(function(data) {
+    db.update(data)
+  })
+}

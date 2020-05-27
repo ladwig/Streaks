@@ -86,6 +86,7 @@ export default function AddNewStreak({ navigation }) {
     <SelectItem key={title} title={title} />
   );
 
+    //Data that gets pushed to database
   let data = {
     streakName: streak,
     interval: intervalChanger(selectedIndex.row),

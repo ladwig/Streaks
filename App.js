@@ -70,7 +70,7 @@ const AuthStackScreen = () => (
 const HomeStack = createStackNavigator();
 
 const HomeStackScreen = () => (
-  <HomeStack.Navigator>
+  <HomeStack.Navigator headerMode="none">
     <HomeStack.Screen name="Home" component={Home} />
   </HomeStack.Navigator>
 );
