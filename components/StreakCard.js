@@ -2,6 +2,9 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Card, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons'; 
+import Colors from '../constants/Colors'
+
 import AddNewStreak from '../screens/AddNewStreak';
 
 const showMeInterval = (interval) => {
@@ -25,10 +28,8 @@ export default function StreakCard(props) {
 
   if (props.isAddCard) {
     return (
-      <Card style={styles.streakContainer} onPress={() => navigation.navigate(AddNewStreak)}>
-      <View>
-        <Text style={styles.addIcon}>➕</Text>
-      </View>
+      <Card style={styles.addIconContainer} onPress={() => navigation.navigate(AddNewStreak)}>
+      <Ionicons name="ios-add-circle-outline" size={64} color="blue" />
     </Card>
     );
   }
@@ -66,6 +67,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     justifyContent: "flex-end",
   },
+  addIconContainer: {
+    display: 'flex', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "100%",
+    marginTop: 10,
+    height: 150
+  },
   streakName: {
     fontSize: 30,
     position: "absolute",
@@ -77,8 +86,4 @@ const styles = StyleSheet.create({
   },
   streakInterval: {
   },
-  addIcon: {
-    fontSize: 80,
-    textAlign: "center"
-  }
 });

@@ -4,6 +4,7 @@ import { AuthContext } from "../context";
 import { Input, Button, Autocomplete, AutocompleteItem, IndexPath, Select, SelectItem } from '@ui-kitten/components';
 import { storeStreakData } from '../databaseActions';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import Colors from '../constants/Colors'
 
 const SelectData = [
   'Daily',
@@ -91,6 +92,7 @@ export default function AddNewStreak({ navigation }) {
     streakName: streak,
     interval: intervalChanger(selectedIndex.row),
     dateAdded: Date.now(),
+    lastUpdate: Date.now(),
     counter: 0,
   }
 

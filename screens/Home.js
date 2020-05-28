@@ -12,7 +12,7 @@ export default function Home({navigation}){
    
   const test = () => {
     getStreakData().then(function(data) {
-      (Object.values(data).map((item) =>console.log(item.streakName)))
+      /* return (Object.values(data).map((item) => <Text>{item.streakName} </Text>) */
     })
   } 
     /*      {(streaks == null) ? (<Text>leeer</Text>) : (Object.values(streaks).map((item) => <Text>{item.streakName} </Text>))}  */

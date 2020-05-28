@@ -29,15 +29,15 @@ import * as firebase from 'firebase';
     }
   }
 
- export const getStreakData = () => {
-  const user = firebase.auth().currentUser.uid; 
-  const db = firebase.database().ref('/streaks/' + user);
-  return db
-  .once("value")
-  .then(function(ref){
-    return ref.val()
-  })
-}  
+  export const getStreakData = () => {
+    const user = firebase.auth().currentUser.uid; 
+    const db = firebase.database().ref('/streaks/' + user);
+    return db
+    .once("value")
+    .then(function(ref){
+      return ref.val()
+    })
+  }  
 
 export const addOneToCounter = (streakId) => {
   const user = firebase.auth().currentUser.uid; 
@@ -47,7 +47,8 @@ export const addOneToCounter = (streakId) => {
   .then(function(ref){
     const counter = ref.val().counter;
     return {
-      counter: counter + 1
+      counter: counter + 1,
+      lastUpdate: Date.now()
     }
   }).then(function(data) {
     db.update(data)

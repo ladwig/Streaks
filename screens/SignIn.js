@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Input, Button } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AuthContext } from '../context';
+import Colors from '../constants/Colors'
 import Logo from '../components/Logo.js';
 
 export default function SignIn({navigation}) {
@@ -14,7 +15,7 @@ export default function SignIn({navigation}) {
     return (
         <View style={styles.container}>
                  <LinearGradient
-                    colors={['rgba(255,214,171,1)', 'rgba(255,182,182,1)']}
+                    colors={[Colors.orangeBackground, Colors.pinkBackground]}
           style={styles.gradient}
         />
         <Logo/>
