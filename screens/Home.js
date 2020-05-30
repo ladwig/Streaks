@@ -1,51 +1,52 @@
-import  React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Text, Button, View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import { getStreakData, storeStreakData, addOneToCounter } from '../databaseActions';
+import { subToStreakData, storeStreakData, addOneToCounter } from '../databaseActions';
 import { useFocusEffect } from '@react-navigation/native';
-import Constants from 'expo-constants';
+import Colors from '../constants/Colors'
+import { Ionicons } from '@expo/vector-icons';
 
 import StreakCard from '../components/StreakCard';
-import StreakCardAdd from '../components/StreakCard';
 
+export default function Home({ navigation }) {
 
-export default function Home({navigation}){
-   
-  const test = () => {
-    getStreakData().then(function(data) {
-      /* return (Object.values(data).map((item) => <Text>{item.streakName} </Text>) */
+  const [streakData, setStreakData] = useState();
+  const [username, setUserName] = useState();
+  useEffect(() => {
+    subToStreakData(
+      function (data) {
+        setStreakData(data);
+      }
+    )
+  }, [setStreakData]);
+
+  const cards = useMemo(() => {
+    if(!streakData) {
+      return ( <Text>loading...</Text>)
+    }
+    return Object.entries(streakData).map( ([itemId, itemData]) => {
+      return(
+        <StreakCard key={itemId} streakName={itemData.streakName} streakCounter={itemData.counter} streakInterval={itemData.interval} />
+      )
     })
-  } 
-    /*      {(streaks == null) ? (<Text>leeer</Text>) : (Object.values(streaks).map((item) => <Text>{item.streakName} </Text>))}  */
+  }, [streakData])
+
   return (
-<SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-      <Text style={styles.welcomeText}>Hey, Daniel 👋</Text>
-        <StreakCard streakName="🏃 Running" streakCounter="10" streakInterval="1"/>
-        <StreakCard streakName="🚭 No Smoking" streakCounter="2" streakInterval="2"/>
-        <StreakCard streakName="📖 Reading" streakCounter="3" streakInterval="1"/>
-        <StreakCard streakName="🏊 Swimming" streakCounter="0" streakInterval="7"/>
-        <StreakCardAdd navigation isAddCard/>
-        {test()}
-        <Button title="test" onPress={ () => addOneToCounter("-M8L-KHXYLG2zXhjeoUo")}/>
+        <Text style={styles.welcomeText}>Hey, Daniel 👋</Text>
+        {cards}
+        <StreakCard navigation isAddCard />
+        <Button title="test" onPress={() => addOneToCounter("-M8L-KHXYLG2zXhjeoUo")} />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-/* const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    flexDirection: "row",
-    flexWrap: 'wrap',
-  },
-});
- */
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: "#F2F2F7"
+    backgroundColor: Colors.lightGray,
 
   },
   scrollView: {

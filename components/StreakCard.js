@@ -10,13 +10,13 @@ import AddNewStreak from '../screens/AddNewStreak';
 const showMeInterval = (interval) => {
   let result = "null";
   switch (interval) {
-    case "1":
+    case 1:
       result = "Days"
       break;
-    case "2":
+    case 2:
       result = "2nd Days"
       break;
-    case "7":
+    case 7:
       result ="Weeks"
       break;
   }
@@ -29,7 +29,7 @@ export default function StreakCard(props) {
   if (props.isAddCard) {
     return (
       <Card style={styles.addIconContainer} onPress={() => navigation.navigate(AddNewStreak)}>
-      <Ionicons name="ios-add-circle-outline" size={64} color="blue" />
+      <Ionicons name="ios-add-circle-outline" size={64} color={Colors.green} />
     </Card>
     );
   }
