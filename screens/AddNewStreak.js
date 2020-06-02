@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet} from 'react-native';
 import { AuthContext } from "../context";
-import { Input, Button, Autocomplete, AutocompleteItem, IndexPath, Select, SelectItem } from '@ui-kitten/components';
+import { Input, Button, IndexPath, Select, SelectItem } from '@ui-kitten/components';
 import { storeStreakData } from '../databaseActions';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import Colors from '../constants/Colors'
@@ -11,23 +11,6 @@ const SelectData = [
   'Every 2 day',
   'Weekly',
 ];
-
-const runningIcon = () => (
-  <FontAwesome5 name="running" size='32' color="blue" />
-);
-
-const readingIcon = () => (
-  <FontAwesome5 name="book" size='32' color="blue" />
-);
-
-const smokeIcon = () => (
-  <MaterialIcons name="smoke-free" size='32' color="blue" />
-);
-
-const starIcon = () => (
-  <FontAwesome5 name="star" size='32' color="blue" />
-);
-
 
 const intervalChanger = (row) => {
   let intervalForDB = null;
@@ -45,40 +28,37 @@ const intervalChanger = (row) => {
   return intervalForDB;
 }
 
-const getIconForWord = (word) => {
-  const inputWord = word.toLowerCase();
-  let icon = starIcon;
-  switch (inputWord) {
-    case 'running':
-      icon = runningIcon;
+const iconSwitcher = (value) => {
+  const input = value.toLowerCase();
+  let icon = "🏆";
+  switch(input) {
+    case "sport":
+    case "weightlifting":
+    case "fitness":
+    case "training":
+      icon = "🏋";
       break;
-    case 'sport':
-      icon = runningIcon;
+    case "running":
+    case "run":
+    case "laufen":
+    case "joggen":
+      icon = "🏃";
       break;
-    case 'run':
-      icon = runningIcon;
-      break;
-    case 'smoking':
-      icon = smokeIcon;
-      break;
-    case 'smoke':
-      icon = smokeIcon;
-      break;
-    case 'no smoking':
-      icon = smokeIcon;
-      break;
-    case 'read':
-      icon = readingIcon;
-      break;
-    case 'reading':
-      icon = readingIcon;
+    case "reading":
+    case "read":
+    case "lesen":
+    case "lernen":
+    case "study":
+    case "buch":
+    case "book reading":
+      icon = "📚"
       break;
   }
-  return icon;
+    return icon;
 }
-
 export default function AddNewStreak({ navigation }) {
   const [streak, setStreak] = React.useState('');
+  const [icon, setIcon] = React.useState();
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
 
   const displayValue = SelectData[selectedIndex.row];
@@ -86,27 +66,24 @@ export default function AddNewStreak({ navigation }) {
   const renderOption = (title) => (
     <SelectItem key={title} title={title} />
   );
-
+  
     //Data that gets pushed to database
   let data = {
     streakName: streak,
     interval: intervalChanger(selectedIndex.row),
     dateAdded: Date.now(),
     lastUpdate: Date.now(),
+    icon: iconSwitcher(streak),
     counter: 0,
   }
 
   return (
     <View style={styles.container}>
-      <Text>Add a new Streak</Text>
-      <Button
-        style={styles.button}
-        appearance='ghost'
-        accessoryLeft={getIconForWord(streak)}
-      />
+      <Text style={styles.headline}>Let's add a new Streak</Text>
+      <Text style={styles.icon}>{iconSwitcher(streak)}</Text>
       <Input
         style={styles.form}
-        label="New Streak"
+        placerholder="New Streak"
         value={streak}
         onChangeText={setStreak}
       ></Input>
@@ -119,9 +96,6 @@ export default function AddNewStreak({ navigation }) {
         onSelect={index => setSelectedIndex(index)}>
         {SelectData.map(renderOption)}
       </Select>
-
-
-
       <Button onPress={() => storeStreakData("streaks", data)}>Save</Button>
     </View>
   );
@@ -134,8 +108,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   form: {
-    width: 300,
-    marginBottom: 10
+    width: "80%",
+    marginBottom: 10,
   },
   gradient: {
     position: 'absolute',
@@ -144,4 +118,16 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: 1000,
   },
+  headline: {
+    marginLeft: "2%",
+    marginTop: "5%",
+    marginBottom: "2%",
+    fontSize: 30,
+    fontWeight: "bold"
+  },
+  icon: {
+    fontSize: 64,
+    marginTop: "5%",
+    marginBottom: "5%",
+  }
 });

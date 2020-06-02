@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Text, Button, View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import { subToStreakData, storeStreakData, addOneToCounter } from '../databaseActions';
-import { useFocusEffect } from '@react-navigation/native';
+import { subToStreakData, subToUserData } from '../databaseActions';
 import Colors from '../constants/Colors'
 import { Ionicons } from '@expo/vector-icons';
 
@@ -10,33 +9,47 @@ import StreakCard from '../components/StreakCard';
 export default function Home({ navigation }) {
 
   const [streakData, setStreakData] = useState();
-  const [username, setUserName] = useState();
+  const [firstNameData, setFirstNameData] = useState();
   useEffect(() => {
     subToStreakData(
-      function (data) {
-        setStreakData(data);
+      function (streakData) {
+        setStreakData(streakData);
       }
     )
   }, [setStreakData]);
 
+  useEffect(() => {
+    subToUserData(
+      function (userData) {
+        setFirstNameData(userData.firstName);
+      }
+    )
+  }, [setFirstNameData]);
+
   const cards = useMemo(() => {
     if(!streakData) {
-      return ( <Text>loading...</Text>)
+      return (<Text>Here is nothing, you want to add something?</Text>)
     }
     return Object.entries(streakData).map( ([itemId, itemData]) => {
       return(
-        <StreakCard key={itemId} streakName={itemData.streakName} streakCounter={itemData.counter} streakInterval={itemData.interval} />
+        <StreakCard key={itemId} streakId={itemId} icon={itemData.icon}streakName={itemData.streakName} streakCounter={itemData.counter} streakInterval={itemData.interval} lastUpdate={itemData.lastUpdate} />
       )
     })
   }, [streakData])
 
+  const firstName = useMemo(() => {
+    if(!firstNameData) {
+      return ( <Text style={styles.welcomeText}>Hey ...... 👋</Text>)
+    }
+    return ( <Text style={styles.welcomeText}>Hey, {firstNameData} 👋</Text>)
+  }, [firstNameData])
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <Text style={styles.welcomeText}>Hey, Daniel 👋</Text>
+       {firstName}
         {cards}
         <StreakCard navigation isAddCard />
-        <Button title="test" onPress={() => addOneToCounter("-M8L-KHXYLG2zXhjeoUo")} />
       </ScrollView>
     </SafeAreaView>
   );

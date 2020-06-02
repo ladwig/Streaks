@@ -29,16 +29,7 @@ export const storeStreakData = (cluster, data) => {
   }
 }
 
-export const getStreakData = () => {
-  const user = firebase.auth().currentUser.uid;
-  const db = firebase.database().ref('/streaks/' + user);
-  return db
-    .on("value")
-    .then(function (ref) {
-      return ref.val()
-    })
-}
-
+//Sub to all streaks of logged in user, runs whenever there is new data
 export const subToStreakData = (callback) => {
   const user = firebase.auth().currentUser.uid;
   const db = firebase.database().ref('/streaks/' + user);
@@ -47,6 +38,16 @@ export const subToStreakData = (callback) => {
   });
 }
 
+export const subToUserData = (callback) => {
+  const user = firebase.auth().currentUser.uid;
+  const db = firebase.database().ref('/users/' + user);
+  db.on('value', function (snapshot) {
+    callback(snapshot.val());
+  });
+}
+
+
+//Function to get streak counter data and add one
 export const addOneToCounter = (streakId) => {
   const user = firebase.auth().currentUser.uid;
   const db = firebase.database().ref('/streaks/' + user + "/" + streakId);
@@ -56,9 +57,21 @@ export const addOneToCounter = (streakId) => {
       const counter = ref.val().counter;
       return {
         counter: counter + 1,
-        lastUpdate: Date.now()
+        lastUpdate: 1588348836000
       }
     }).then(function (data) {
       db.update(data)
     })
+}
+
+//hier muss ich weiterschreiben,   updateCounter("-M8pC7wHmG70hK2gAxIp") .... 
+export const updateCounter = (streakId) => {
+  console.log("ok")
+  const user = firebase.auth().currentUser.uid;
+  const db = firebase.database().ref('/streaks/' + user + "/" + streakId);
+  return db.update({
+    counter: 0,
+    lastUpdate: Date.now()
+  }  
+  )
 }
