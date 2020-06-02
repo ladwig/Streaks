@@ -31,9 +31,11 @@ const handleCounter = (streakInterval, lastUpdate) => {
   switch (streakInterval) {
     case 1:
       if ((lastUpdate + 86400 + timeRemaining) > now) {
-        console.log("ist im Rahmen")
+       /* im Rahmen */
       }
-      else{console.log("ist nicht im Rahmen")}
+      else{
+        /* nicht im Rahmen */
+      }
       break;
     case 2:
       if (lastUpdate < (Date.now() - 172800)) {

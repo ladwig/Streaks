@@ -5,6 +5,7 @@ import { Input, Button, IndexPath, Select, SelectItem } from '@ui-kitten/compone
 import { storeStreakData } from '../databaseActions';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import Colors from '../constants/Colors'
+import Home from '../screens/Home';
 
 const SelectData = [
   'Daily',
@@ -29,7 +30,7 @@ const intervalChanger = (row) => {
 }
 
 const iconSwitcher = (value) => {
-  const input = value.toLowerCase();
+  const input = value.toLowerCase().split(' ').join('');
   let icon = "🏆";
   switch(input) {
     case "sport":
@@ -56,6 +57,7 @@ const iconSwitcher = (value) => {
   }
     return icon;
 }
+
 export default function AddNewStreak({ navigation }) {
   const [streak, setStreak] = React.useState('');
   const [icon, setIcon] = React.useState();
@@ -77,6 +79,11 @@ export default function AddNewStreak({ navigation }) {
     counter: 0,
   }
 
+  const handleSubmit = () => {
+    storeStreakData("streaks", data);
+    navigation.navigate(Home);
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.headline}>Let's add a new Streak</Text>
@@ -96,7 +103,7 @@ export default function AddNewStreak({ navigation }) {
         onSelect={index => setSelectedIndex(index)}>
         {SelectData.map(renderOption)}
       </Select>
-      <Button onPress={() => storeStreakData("streaks", data)}>Save</Button>
+      <Button onPress={() => handleSubmit()}>Save</Button>
     </View>
   );
 }

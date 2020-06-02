@@ -6,7 +6,7 @@ export const storeUserData = (cluster, data) => {
   for (const [key, value] of Object.entries(data)) {
     clusterRef.child(key).set(value), function (error) {
       if (error) {
-        alert(error);
+        alert("error")
       } else {
         alert("Sucess!")
       }
@@ -16,16 +16,17 @@ export const storeUserData = (cluster, data) => {
 
 export const storeStreakData = (cluster, data) => {
   const user = firebase.auth().currentUser.uid;
+  let sucess = false;
   const clusterRef = firebase.database().ref(cluster + "/" + user);
   const addNewRef = clusterRef.push();
   for (const [key, value] of Object.entries(data)) {
-    addNewRef.child(key).set(value), function (error) {
+    addNewRef.child(key).set(value, function (error) {
       if (error) {
         alert(error);
       } else {
-        alert("Sucess!")
+        sucess = true;
       }
-    };
+    });
   }
 }
 
