@@ -67,7 +67,6 @@ export const addOneToCounter = (streakId) => {
 
 //hier muss ich weiterschreiben,   updateCounter("-M8pC7wHmG70hK2gAxIp") .... 
 export const updateCounter = (streakId) => {
-  console.log("ok")
   const user = firebase.auth().currentUser.uid;
   const db = firebase.database().ref('/streaks/' + user + "/" + streakId);
   return db.update({
@@ -75,4 +74,10 @@ export const updateCounter = (streakId) => {
     lastUpdate: Date.now()
   }  
   )
+}
+
+export const deleteOneStreak = (streakId) => {
+  const user = firebase.auth().currentUser.uid;
+  const db = firebase.database().ref('/streaks/' + user + "/" + streakId);
+  db.remove();
 }

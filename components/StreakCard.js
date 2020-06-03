@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Button, Alert } from 'react-native';
 import { Card, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors'
-import { addOneToCounter, updateCounter } from '../databaseActions';
+import { addOneToCounter, updateCounter, deleteOneStreak } from '../databaseActions';
 import AddNewStreak from '../screens/AddNewStreak';
 
 const showMeInterval = (interval) => {
@@ -50,6 +50,25 @@ const handleCounter = (streakInterval, lastUpdate) => {
   }
 }
 
+const handleLongClick = (streakId) => {
+  Alert.alert(
+    'Delete this Streak',
+    'Are you sure?',
+    [
+      {
+       text: 'Yes', 
+       onPress: () => deleteOneStreak(streakId)
+      },     
+      {       
+        text: 'Cancel',       
+        onPress: () => console.log('Cancel '),       
+        style: 'cancel',     
+      }
+    ],   
+    { cancelable: false }, 
+  );
+}
+
 export default function StreakCard(props) {
   const navigation = useNavigation();
 
@@ -60,8 +79,10 @@ export default function StreakCard(props) {
       </Card>
     );
   }
+
   return (
-    <Card style={styles.streakContainer} onPress={() => addOneToCounter(props.streakId)}>
+    <Card style={styles.streakContainer} activeOpacity={0.8} onLongPress={ () => handleLongClick(props.streakId)} onPress={() => addOneToCounter(props.streakId)}>
+ 
       <View style={styles.streakNameContainer}>
         <Text style={styles.streakName}>{props.icon} {props.streakName}</Text>
       </View>
