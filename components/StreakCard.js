@@ -7,6 +7,8 @@ import Colors from '../constants/Colors'
 import { addOneToCounter, updateCounter, deleteOneStreak } from '../databaseActions';
 import AddNewStreak from '../screens/AddNewStreak';
 
+
+//Returns the right word as a string for a given interval to display it, 1 -> Day , 2 -> 2 Days , 7 -> 7 Days
 const showMeInterval = (interval) => {
   let result = "null";
   switch (interval) {
@@ -23,6 +25,8 @@ const showMeInterval = (interval) => {
   return result;
 }
 
+
+//Handler for each streak counter, still in progress
 const handleCounter = (streakInterval, lastUpdate) => {
   const midnight = new Date().setHours(24, 0, 0, 0);
   const now = Date.now();
@@ -50,7 +54,8 @@ const handleCounter = (streakInterval, lastUpdate) => {
   }
 }
 
-const handleLongClick = (streakId) => {
+//Handle a long press and shows an alert with a delete option (calls firebase delete function)
+const handleLongPress = (streakId) => {
   Alert.alert(
     'Delete this Streak',
     'Are you sure?',
@@ -61,7 +66,6 @@ const handleLongClick = (streakId) => {
       },     
       {       
         text: 'Cancel',       
-        onPress: () => console.log('Cancel '),       
         style: 'cancel',     
       }
     ],   
@@ -81,7 +85,7 @@ export default function StreakCard(props) {
   }
 
   return (
-    <Card style={styles.streakContainer} activeOpacity={0.8} onLongPress={ () => handleLongClick(props.streakId)} onPress={() => addOneToCounter(props.streakId)}>
+    <Card style={styles.streakContainer} activeOpacity={0.8} onLongPress={ () => handleLongPress(props.streakId)} onPress={() => addOneToCounter(props.streakId)}>
  
       <View style={styles.streakNameContainer}>
         <Text style={styles.streakName}>{props.icon} {props.streakName}</Text>

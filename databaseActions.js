@@ -30,7 +30,7 @@ export const storeStreakData = (cluster, data) => {
   }
 }
 
-//Sub to all streaks of logged in user, runs whenever there is new data
+//Subscribe to all streaks @ logged in user, runs whenever there is new data
 export const subToStreakData = (callback) => {
   const user = firebase.auth().currentUser.uid;
   const db = firebase.database().ref('/streaks/' + user);
@@ -39,6 +39,7 @@ export const subToStreakData = (callback) => {
   });
 }
 
+//Subscribe to the current users data
 export const subToUserData = (callback) => {
   const user = firebase.auth().currentUser.uid;
   const db = firebase.database().ref('/users/' + user);
@@ -76,8 +77,15 @@ export const updateCounter = (streakId) => {
   )
 }
 
+//Delete a Streak from the db with given streakId
 export const deleteOneStreak = (streakId) => {
   const user = firebase.auth().currentUser.uid;
   const db = firebase.database().ref('/streaks/' + user + "/" + streakId);
-  db.remove();
+  db.remove(function (error) {
+    if (error) {
+      alert(error);
+    } else {
+      console.log("sucess")
+    }
+  });
 }

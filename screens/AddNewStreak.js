@@ -69,7 +69,8 @@ export default function AddNewStreak({ navigation }) {
     <SelectItem key={title} title={title} />
   );
   
-    //Data that gets pushed to database
+  
+  //Data that gets pushed to database
   let data = {
     streakName: streak,
     interval: intervalChanger(selectedIndex.row),
@@ -79,6 +80,7 @@ export default function AddNewStreak({ navigation }) {
     counter: 0,
   }
 
+  //Handle the submit and pushes to home screen, still needs validation checks
   const handleSubmit = () => {
     storeStreakData("streaks", data);
     navigation.navigate(Home);

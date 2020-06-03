@@ -10,6 +10,8 @@ export default function Home({ navigation }) {
 
   const [streakData, setStreakData] = useState();
   const [firstNameData, setFirstNameData] = useState();
+
+  //Gets called at first render and everytime a streak gets added or updated
   useEffect(() => {
     subToStreakData(
       function (streakData) {
@@ -18,6 +20,7 @@ export default function Home({ navigation }) {
     )
   }, [setStreakData]);
 
+  //Gets called at first render and everytime the username gets changed
   useEffect(() => {
     subToUserData(
       function (userData) {
@@ -26,6 +29,7 @@ export default function Home({ navigation }) {
     )
   }, [setFirstNameData]);
 
+  //Return and render function for the StreakCards, if there is no data it displays loading/info text, else it iterates and renders the cards
   const cards = useMemo(() => {
     if(!streakData) {
       return (<Text>Here is nothing, you want to add something?</Text>)
@@ -37,6 +41,7 @@ export default function Home({ navigation }) {
     })
   }, [streakData])
 
+  //Return and render function for the username
   const firstName = useMemo(() => {
     if(!firstNameData) {
       return ( <Text style={styles.welcomeText}>Hey ...... 👋</Text>)
