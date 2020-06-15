@@ -105,6 +105,8 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 10,
     height: 150,
+    backgroundColor: Colors.white,
+    color: Colors.mainText
   },
   streakCounterContainer: {
     flexDirection: 'row',
@@ -130,11 +132,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     position: "absolute",
     top: 30,
-    marginLeft: -10
+    marginLeft: -10,
+    color: Colors.mainText,
   },
   streakCounter: {
     fontSize: 50,
+    color: Colors.mainText,
   },
   streakInterval: {
+    color: Colors.mainText,
   },
 });

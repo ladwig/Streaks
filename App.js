@@ -12,7 +12,7 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as Device from 'expo-device';
 
 
-import { storeUserData, getFirstName } from './databaseActions';
+import { storeUserData } from './databaseActions';
 
 
 /* Import all Screens */
@@ -68,21 +68,27 @@ const AuthStackScreen = () => (
 );
 
 const HomeStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
 
 const HomeStackScreen = () => (
   <HomeStack.Navigator headerMode="none">
-    <HomeStack.Screen name="Home" component={Home} />
+    <HomeStack.Screen  name="Home" component={Home} />
   </HomeStack.Navigator>
 );
 
+const ProfileStackScreen = () => (
+  <ProfileStack.Navigator>
+    <ProfileStack.Screen  name="Profile" component={Profile} />
+  </ProfileStack.Navigator>
+);
 const Drawer = createDrawerNavigator();
 const DrawerScreen = () => (
   <Drawer.Navigator initialRouteName="Home" drawerStyle={{
     backgroundColor: '#fff',
     width: 240,
   }}>
-    <Drawer.Screen name="Home" component={HomeStackScreen} />
-    <Drawer.Screen name="Profile" component={Profile} />
+    <Drawer.Screen name="Home"  component={HomeStackScreen} />
+    <Drawer.Screen name="Profile" component={ProfileStackScreen} />
     <Drawer.Screen name="AddNewStreak" component={AddNewStreak} />
   </Drawer.Navigator>
 );

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Text, View, StyleSheet} from 'react-native';
+import { Text, View, StyleSheet, Animated } from 'react-native';
 import { AuthContext } from "../context";
 import { Input, Button, IndexPath, Select, SelectItem } from '@ui-kitten/components';
 import { storeStreakData } from '../databaseActions';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
-import Colors from '../constants/Colors'
-import Home from '../screens/Home';
+import Colors from '../constants/Colors';
 
 const SelectData = [
   'Daily',
@@ -32,7 +31,7 @@ const intervalChanger = (row) => {
 const iconSwitcher = (value) => {
   const input = value.toLowerCase().split(' ').join('');
   let icon = "🏆";
-  switch(input) {
+  switch (input) {
     case "sport":
     case "weightlifting":
     case "fitness":
@@ -55,7 +54,7 @@ const iconSwitcher = (value) => {
       icon = "📚"
       break;
   }
-    return icon;
+  return icon;
 }
 
 export default function AddNewStreak({ navigation }) {
@@ -68,8 +67,8 @@ export default function AddNewStreak({ navigation }) {
   const renderOption = (title) => (
     <SelectItem key={title} title={title} />
   );
-  
-  
+
+
   //Data that gets pushed to database
   let data = {
     streakName: streak,
@@ -82,21 +81,39 @@ export default function AddNewStreak({ navigation }) {
 
   //Handle the submit and pushes to home screen, still needs validation checks
   const handleSubmit = () => {
-    storeStreakData("streaks", data);
-    navigation.navigate(Home);
+
+    if (!(streak === '')) {
+      storeStreakData("streaks", data);
+      navigation.goBack();
+    }
+    startShake();
   }
+
+  //Shaking animation
+  const shakeAnimation = new Animated.Value(0);
+  const startShake = () => {
+    Animated.sequence([
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: -10, duration: 100, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 0, duration: 100, useNativeDriver: true })
+    ]).start();
+  }
+
 
   return (
     <View style={styles.container}>
       <Text style={styles.headline}>Let's add a new Streak</Text>
       <Text style={styles.icon}>{iconSwitcher(streak)}</Text>
-      <Input
-        style={styles.form}
-        placerholder="New Streak"
-        value={streak}
-        onChangeText={setStreak}
-      ></Input>
-
+      <Animated.View style={{ transform: [{ translateX: shakeAnimation }] }}>
+        <Input
+          style={styles.form}
+          placeholder="My new habit"
+          status="basic"
+          value={streak}
+          onChangeText={setStreak}
+        ></Input>
+      </Animated.View>
       <Select
         style={styles.form}
         placeholder='Default'
@@ -105,7 +122,9 @@ export default function AddNewStreak({ navigation }) {
         onSelect={index => setSelectedIndex(index)}>
         {SelectData.map(renderOption)}
       </Select>
-      <Button onPress={() => handleSubmit()}>Save</Button>
+      <Animated.View style={{ transform: [{ translateX: shakeAnimation }] }}>
+        <Button onPress={() => handleSubmit()}>Save</Button>
+      </Animated.View>
     </View>
   );
 }

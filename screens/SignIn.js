@@ -14,10 +14,10 @@ export default function SignIn({navigation}) {
 
     return (
         <View style={styles.container}>
-                 <LinearGradient
+                {/*  <LinearGradient
                     colors={[Colors.orangeBackground, Colors.pinkBackground]}
           style={styles.gradient}
-        />
+        /> */}
         <Logo/>
             <Input
                 placeholder="E-Mail"
