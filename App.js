@@ -69,30 +69,38 @@ const AuthStackScreen = () => (
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
+const AddStack = createStackNavigator();
 
 const HomeStackScreen = () => (
   <HomeStack.Navigator headerMode="none">
     <HomeStack.Screen name="Home" component={Home} />
-    <HomeStack.Screen name="AddNewStreak" component={AddNewStreak}/>
   </HomeStack.Navigator>
 );
 
 const ProfileStackScreen = () => (
   <ProfileStack.Navigator>
     <ProfileStack.Screen name="Profile" component={Profile}
-          options={{
-            headerLeft: (...props) => (
-              <HeaderBackButton
-                {...props}
-                onPress={() => {
-           
-                  
-                }}
-              />
+          options={({ navigation }) => ({
+            title: 'Edit Profile',
+            headerLeft: () => (
+              <HeaderBackButton onPress={() => navigation.goBack()} />
             ),
-          }}
+          })}
              />
   </ProfileStack.Navigator>
+);
+
+const AddStackScreen = () => (
+  <AddStack.Navigator>
+    <AddStack.Screen name="AddNewStreak" component={AddNewStreak}
+          options={({ navigation }) => ({
+            title: '',
+            headerLeft: () => (
+              <HeaderBackButton onPress={() => navigation.goBack()} />
+            ),
+          })}
+             />
+  </AddStack.Navigator>
 );
 const Drawer = createDrawerNavigator();
 const DrawerScreen = () => (
@@ -105,7 +113,7 @@ const DrawerScreen = () => (
     itemStyle: { marginVertical: 5 },
   }}>
     <Drawer.Screen name="Home"  component={HomeStackScreen} />
-    <Drawer.Screen name="AddNewStreak" component={AddNewStreak}   options={{ title: "Add a Loop"}} />
+    <Drawer.Screen name="AddNewStreak" component={AddStackScreen}   options={{ title: "Add a Loop"}} />
     <Drawer.Screen name="Profile" component={ProfileStackScreen} />
   </Drawer.Navigator>
 );
