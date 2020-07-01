@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { AsyncStorage } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AuthContext } from "./context";
 import * as firebase from 'firebase';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
-
 import * as Device from 'expo-device';
 
 
@@ -25,6 +24,7 @@ import AddNewStreak from './screens/AddNewStreak';
 
 import ApiKeys from './constants/ApiKeys';
 
+/* Only starts firebase once */
 if (!firebase.apps.length) {
   firebase.initializeApp(ApiKeys.FirebaseConfig);
 }
@@ -72,24 +72,41 @@ const ProfileStack = createStackNavigator();
 
 const HomeStackScreen = () => (
   <HomeStack.Navigator headerMode="none">
-    <HomeStack.Screen  name="Home" component={Home} />
+    <HomeStack.Screen name="Home" component={Home} />
+    <HomeStack.Screen name="AddNewStreak" component={AddNewStreak}/>
   </HomeStack.Navigator>
 );
 
 const ProfileStackScreen = () => (
   <ProfileStack.Navigator>
-    <ProfileStack.Screen  name="Profile" component={Profile} />
+    <ProfileStack.Screen name="Profile" component={Profile}
+          options={{
+            headerLeft: (...props) => (
+              <HeaderBackButton
+                {...props}
+                onPress={() => {
+           
+                  
+                }}
+              />
+            ),
+          }}
+             />
   </ProfileStack.Navigator>
 );
 const Drawer = createDrawerNavigator();
 const DrawerScreen = () => (
   <Drawer.Navigator initialRouteName="Home" drawerStyle={{
     backgroundColor: '#fff',
-    width: 240,
+    width: 200,
+  }}
+  drawerContentOptions={{
+    activeTintColor: '#FFB248',
+    itemStyle: { marginVertical: 5 },
   }}>
     <Drawer.Screen name="Home"  component={HomeStackScreen} />
+    <Drawer.Screen name="AddNewStreak" component={AddNewStreak}   options={{ title: "Add a Loop"}} />
     <Drawer.Screen name="Profile" component={ProfileStackScreen} />
-    <Drawer.Screen name="AddNewStreak" component={AddNewStreak} />
   </Drawer.Navigator>
 );
 
@@ -124,7 +141,6 @@ export default function App() {
     return {
       signIn: async data => {
           firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
-        
           storeData('userId', firebasedata.user.uid);
           setUserToken(firebasedata.user.uid);
           const userData = {
@@ -157,6 +173,7 @@ export default function App() {
           .catch(function (error) {
             alert(error.message);
           })
+
       },
       signOut: () => {
         setIsLoading(false);

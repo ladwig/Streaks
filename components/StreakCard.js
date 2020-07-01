@@ -60,16 +60,24 @@ export default function StreakCard(props) {
       /* one day */
       case 1:
          /* When counter is clickable */
-        if ((lastUpdate + 86400 + timeRemaining) > now) {
+        if ((lastUpdate + 86400 + timeRemaining) < now) {
+        console.log(props.streakId + ': clickable')
          status = 0;
         }
         /* When counter is too new to get clicked one more time */
-        if((lastUpdate + 86400 + timeRemaining) < now) {
+/*         else if(((lastUpdate + 86400 + timeRemaining) < now) && (now > lastUpdate )) {
           status = 1;
+          console.log('status: too new')
+        } */
+        else if(((lastUpdate + 10) <= now) && (now > lastUpdate )) {  /*  now >= (lastUpdate + (zeit bis Mitternacht von lastUpate)) && now < (lastUpdate + 86400 + timeRemaining))*/
+          status = 1;
+          console.log(props.streakId + ':too new')
         }
+        
         /* When counter is to old to get clicked --> should reset counter to 0 */
         else {
           status = 2;
+          console.log('status: too old, reset')
           /* function --> updateCounter(id) */ 
         }
         break;
@@ -94,7 +102,7 @@ export default function StreakCard(props) {
     /* Shows a custom card which links to the AddNewStreak screen */
     return (
       <Card style={styles.addIconContainer} onPress={() => navigation.navigate(AddNewStreak)}>
-        <Ionicons name="ios-add-circle-outline" size={64} color={Colors.green} />
+        <Ionicons name="ios-add-circle-outline" size={64} color={Colors.mainColor} />
       </Card>
     );
   }

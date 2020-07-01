@@ -59,7 +59,7 @@ export const addOneToCounter = (streakId) => {
       const counter = ref.val().counter;
       return {
         counter: counter + 1,
-        lastUpdate: 1588348836000
+        lastUpdate: Date.now()
       }
     }).then(function (data) {
       db.update(data)

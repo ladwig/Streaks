@@ -7,6 +7,7 @@ const Colors = {
     darkestBlue: '#022543',
     green: 'rgb(52, 199, 89)',
     red:  'rgb(255, 59, 48)',
+    mainColor: '#FFB248',
     orangeBackground: 'rgba(255,214,171,1)',
     pinkBackground: 'rgba(255,182,182,1)',
   }
