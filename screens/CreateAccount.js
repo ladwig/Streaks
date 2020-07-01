@@ -3,40 +3,50 @@ import { View, StyleSheet } from 'react-native';
 import { AuthContext } from "../context";
 import { Input, Button } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
+import Colors from '../constants/Colors';
 
 export default function SignUp() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [firstName, setFirstName] = React.useState('');
-  
   const { signUp } = React.useContext(AuthContext);
+
+ const handleSubmit = (email, password, firstName) => {
+   if(firstName != '') {
+    signUp({ email, password, firstName})
+   }
+   else{ alert("Sooo...whats your name?")}
+ }
 
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['rgba(255,214,171,1)', 'rgba(255,182,182,1)']}
+        colors={[Colors.mainColor, Colors.lightOrange]}
         style={styles.gradient}
       />
       <Input
-        placeholder="How should we call u?"
+       label="Your Name"
+        placeholder="Maxi"
         value={firstName}
         onChangeText={setFirstName}
         style={styles.form}
       />
       <Input
-        placeholder="E-Mail"
+        label="E-Mail"
+        placeholder="maxi@online.de"
         value={email}
         onChangeText={setEmail}
         style={styles.form}
       />
       <Input
-        placeholder="Password"
+        label="Password"
+        placeholder="•••••••••••"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
         style={styles.form}
       />
-      <Button status='primary' style={styles.form} onPress={() => signUp({ email, password, firstName})}>
+      <Button status='primary' style={styles.form} onPress={() => handleSubmit(email, password, firstName)}>
         Create Account
     </Button>
     </View>
