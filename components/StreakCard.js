@@ -7,9 +7,8 @@ import Colors from '../constants/Colors'
 import { addOneToCounter, updateCounter, deleteOneStreak } from '../databaseActions';
 import AddNewStreak from '../screens/AddNewStreak';
 
-
 //Returns the right word as a string for a given interval to display it, 1 -> Day , 2 -> 2 Days , 7 -> 7 Days
-const showMeInterval = (interval) => {
+const showMeInterval = (interval, counter) => {
   let result = "null";
   switch (interval) {
     case 1:
@@ -35,67 +34,20 @@ const handleLongPress = (streakId) => {
     'Are you sure?',
     [
       {
-       text: 'Yes', 
-       onPress: () => deleteOneStreak(streakId)
-      },     
-      {       
-        text: 'Cancel',       
-        style: 'cancel',     
+        text: 'Yes',
+        onPress: () => deleteOneStreak(streakId)
+      },
+      {
+        text: 'Cancel',
+        style: 'cancel',
       }
-    ],   
-    { cancelable: false }, 
+    ],
+    { cancelable: false },
   );
 }
 
 export default function StreakCard(props) {
   const navigation = useNavigation();
-  const [countAllowed, setCountAllowed] = React.useState(false);
-
-  const counterStatus = (streakInterval, lastUpdate) => {
-    const midnight = new Date().setHours(24, 0, 0, 0);
-    const now = Date.now();
-    const timeRemaining = midnight - now;
-    let status = 1;
-    switch (streakInterval) {
-      /* one day */
-      case 1:
-         /* When counter is clickable */
-        if ((lastUpdate + 86400 + timeRemaining) < now) {
-        console.log(props.streakId + ': clickable')
-         status = 0;
-        }
-        /* When counter is too new to get clicked one more time */
-/*         else if(((lastUpdate + 86400 + timeRemaining) < now) && (now > lastUpdate )) {
-          status = 1;
-          console.log('status: too new')
-        } */
-        else if(((lastUpdate + 10) <= now) && (now > lastUpdate )) {  /*  now >= (lastUpdate + (zeit bis Mitternacht von lastUpate)) && now < (lastUpdate + 86400 + timeRemaining))*/
-          status = 1;
-          console.log(props.streakId + ':too new')
-        }
-        
-        /* When counter is to old to get clicked --> should reset counter to 0 */
-        else {
-          status = 2;
-          console.log('status: too old, reset')
-          /* function --> updateCounter(id) */ 
-        }
-        break;
-      /* every two days */
-      case 2:
-        if (lastUpdate < (Date.now() - 172800)) {
-        
-        }
-        break;
-      /* every week */
-      case 7:
-        if (lastUpdate < (Date.now() - 604800)) {
-       
-        }
-        break;
-    }
-    return status;
-  }
 
   if (props.isAddCard) {
 
@@ -107,26 +59,27 @@ export default function StreakCard(props) {
     );
   }
 
-   /*  Gets rendered, when you're not allowed to add one to the counter, for example when u already pressed the counter for today */
-  if ((counterStatus(props.streakInterval, props.lastUpdate)) === 1) {
+  /*  Gets rendered, when you're not allowed to add one to the counter (when you already updated it in the given interval) */
+  if (!props.isEditable && props.streakCounter != 0) {
     return (
-      <Card style={styles.streakContainerBlocked} activeOpacity={0.8} onLongPress={ () => handleLongPress(props.streakId)}>
-      <View style={styles.streakNameContainer}>
-        <Text style={[styles.streakName, styles.textColorBlocked]}>{props.icon} {props.streakName}</Text>
-      </View>
-      <View style={styles.streakCounterContainer}>
-        <Text style={[styles.streakCounter, styles.textColorBlocked]}>{props.streakCounter}</Text>
-      </View>
-      <View style={styles.streakIntervalContainer}>
-        <Text style={styles.textColorBlocked}>{showMeInterval(props.streakInterval)}</Text>
-      </View>
-    </Card>
+      <Card style={styles.streakContainerBlocked} activeOpacity={0.8} onLongPress={() => handleLongPress(props.streakId)}>
+        <View style={styles.streakNameContainer}>
+          <Text style={[styles.streakName, styles.textColorBlocked]}>{props.icon} {props.streakName}</Text>
+        </View>
+        <View style={styles.streakCounterContainer}>
+          <Text style={[styles.streakCounter, styles.textColorBlocked]}>{props.streakCounter}</Text>
+        </View>
+        <View style={styles.streakIntervalContainer}>
+          <Text style={styles.textColorBlocked}>{showMeInterval(props.streakInterval, props.streakCounter)}</Text>
+        </View>
+      </Card>
     );
   }
 
+  /*  Gets rendered, when you're allowed to add one to the counter  */
   return (
-    <Card style={styles.streakContainer} activeOpacity={0.8} onLongPress={ () => handleLongPress(props.streakId)} onPress={() => addOneToCounter(props.streakId)}>
- 
+    <Card style={styles.streakContainer} activeOpacity={0.8} onLongPress={() => handleLongPress(props.streakId)} onPress={() => addOneToCounter(props.streakId)}>
+
       <View style={styles.streakNameContainer}>
         <Text style={[styles.streakName, styles.textColor]}>{props.icon} {props.streakName}</Text>
       </View>
@@ -134,7 +87,7 @@ export default function StreakCard(props) {
         <Text style={[styles.streakCounter, styles.textColor]}>{props.streakCounter}</Text>
       </View>
       <View style={styles.streakIntervalContainer}>
-        <Text style={styles.textColor}>{showMeInterval(props.streakInterval)}</Text>
+        <Text style={styles.textColor}>{showMeInterval(props.streakInterval, props.streakCounter)}</Text>
       </View>
     </Card>
   );
@@ -178,7 +131,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 30,
     marginLeft: -10,
-   
+
   },
 
   textColor: {
@@ -193,6 +146,6 @@ const styles = StyleSheet.create({
 
   },
   streakInterval: {
-    
+
   },
 });

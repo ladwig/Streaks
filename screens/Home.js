@@ -1,10 +1,31 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Text, Button, View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import { subToStreakData, subToUserData } from '../databaseActions';
+import { subToStreakData, subToUserData, updateCounter } from '../databaseActions';
 import Colors from '../constants/Colors'
 import { Ionicons } from '@expo/vector-icons';
-
+import ms from 'ms';
 import StreakCard from '../components/StreakCard';
+
+function modifyStreakData(streakData) {
+
+  return Object.entries(streakData).map(([itemId, itemData]) => {
+    const interval = ms(`${itemData.interval}d`);
+    const lastUpdateDayEnd = new Date(itemData.lastUpdate).setHours(24, 0, 0, 0);
+    const lastUpdateIntervalEnd = lastUpdateDayEnd + interval - ms('1d')
+
+    if (Date.now() > (lastUpdateIntervalEnd + interval)) {
+      //Reset the counter for the render function. The firebase counter data gets updated ansyc --> updateCounter
+      updateCounter(itemId); 
+      return [itemId, { ...itemData, counter: 0 }]
+    }
+
+    if (Date.now() > lastUpdateIntervalEnd) {
+      return [itemId, { ...itemData, isEditable: true }]
+    }
+    return [itemId, itemData]
+
+  })
+}
 
 export default function Home({ navigation }) {
 
@@ -15,7 +36,7 @@ export default function Home({ navigation }) {
   useEffect(() => {
     subToStreakData(
       function (streakData) {
-        setStreakData(streakData);
+        setStreakData(modifyStreakData(streakData));
       }
     )
   }, [setStreakData]);
@@ -31,28 +52,28 @@ export default function Home({ navigation }) {
 
   //Return and render function for the StreakCards, if there is no data it displays loading/info text, else it iterates and renders the cards
   const cards = useMemo(() => {
-    if(!streakData) {
+    if (!streakData) {
       return (<Text>Here is nothing, you want to add something?</Text>)
     }
-    return Object.entries(streakData).map( ([itemId, itemData]) => {
-      return(
-        <StreakCard key={itemId} streakId={itemId} icon={itemData.icon}streakName={itemData.streakName} streakCounter={itemData.counter} streakInterval={itemData.interval} lastUpdate={itemData.lastUpdate} />
+    return streakData.map(([itemId, itemData]) => {
+      return (
+        <StreakCard key={itemId} streakId={itemId} icon={itemData.icon} streakName={itemData.streakName} streakCounter={itemData.counter} streakInterval={itemData.interval} lastUpdate={itemData.lastUpdate} isEditable={itemData.isEditable} />
       )
     })
   }, [streakData])
 
   //Return and render function for the username
   const firstName = useMemo(() => {
-    if(!firstNameData) {
-      return ( <Text style={styles.welcomeText}>Hey ...... 👋</Text>)
+    if (!firstNameData) {
+      return (<Text style={styles.welcomeText}>Hey ...... 👋</Text>)
     }
-    return ( <Text style={styles.welcomeText}>Hey, {firstNameData} 👋</Text>)
+    return (<Text style={styles.welcomeText}>Hey, {firstNameData} 👋</Text>)
   }, [firstNameData])
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-       {firstName}
+        {firstName}
         {cards}
         <StreakCard navigation isAddCard />
       </ScrollView>
