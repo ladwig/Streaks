@@ -9,18 +9,28 @@ import AddNewStreak from '../screens/AddNewStreak';
 
 //Returns the right word as a string for a given interval to display it, 1 -> Day , 2 -> 2 Days , 7 -> 7 Days
 const showMeInterval = (interval, counter) => {
-  let result = "null";
-  switch (interval) {
-    case 1:
+  let result = "Interval";
+  switch (true) {
+    case (interval = 1 && counter != 1):
       result = "Days"
       break;
-    case 2:
+    case (interval = 1 && counter == 1):
+      result = "Day"
+      break;
+    case (interval = 2 && counter != 1):
       result = "2nd Days"
       break;
-    case 7:
+    case (interval = 2 && counter == 1):
+      result = "2nd Day"
+      break;
+    case (interval = 7 && counter != 1):
       result = "Weeks"
       break;
+    case (interval = 7 && counter == 1):
+      result = "Week"
+      break;
   }
+
   return result;
 }
 
