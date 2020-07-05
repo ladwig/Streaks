@@ -11,31 +11,28 @@ import AddNewStreak from '../screens/AddNewStreak';
 const showMeInterval = (interval, counter) => {
   let result = "Interval";
   switch (true) {
-    case (interval = 1 && counter != 1):
+    case ((interval == 1) && (counter != 1)):
       result = "Days"
       break;
-    case (interval = 1 && counter == 1):
+    case ((interval == 1) && (counter == 1)):
       result = "Day"
       break;
-    case (interval = 2 && counter != 1):
+    case ((interval == 2) && (counter != 1)):
       result = "2nd Days"
       break;
-    case (interval = 2 && counter == 1):
+    case ((interval == 2) && (counter == 1)):
       result = "2nd Day"
       break;
-    case (interval = 7 && counter != 1):
+    case ((interval == 7) && (counter != 1)):
       result = "Weeks"
       break;
-    case (interval = 7 && counter == 1):
+    case ((interval == 7) && (counter == 1)):
       result = "Week"
       break;
   }
 
   return result;
 }
-
-//Handler for each streak counter, still in progress
-
 
 //Handle a long press and shows an alert with a delete option (calls firebase delete function)
 const handleLongPress = (streakId) => {
