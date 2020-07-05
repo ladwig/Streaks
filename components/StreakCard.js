@@ -63,7 +63,7 @@ export default function StreakCard(props) {
 
     // Shows a custom card which links to the AddNewStreak screen 
     return (
-      <Card style={styles.addIconContainer} onPress={() => navigation.navigate(AddNewStreak)}>
+      <Card style={styles.addIconContainer} onPress={() => navigation.navigate('AddNewStreak')}>
         <Ionicons name="ios-add-circle-outline" size={64} color={Colors.mainColor} />
       </Card>
     );

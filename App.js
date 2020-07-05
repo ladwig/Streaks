@@ -10,7 +10,6 @@ import * as eva from '@eva-design/eva';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as Device from 'expo-device';
 
-
 import { storeUserData } from './databaseActions';
 
 
@@ -32,7 +31,7 @@ if (!firebase.apps.length) {
 storeData = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, value)
-  } catch(error) {
+  } catch (error) {
     alert(error);
   }
 }
@@ -49,7 +48,7 @@ retrieveData = async (key) => {
   } catch (error) {
     // Error retrieving data
   }
-};  
+};
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
@@ -80,26 +79,26 @@ const HomeStackScreen = () => (
 const ProfileStackScreen = () => (
   <ProfileStack.Navigator>
     <ProfileStack.Screen name="Profile" component={Profile}
-          options={({ navigation }) => ({
-            title: 'Edit Profile',
-            headerLeft: () => (
-              <HeaderBackButton onPress={() => navigation.goBack()} />
-            ),
-          })}
-             />
+      options={({ navigation }) => ({
+        title: 'Edit Profile',
+        headerLeft: () => (
+          <HeaderBackButton onPress={() => navigation.goBack()} />
+        ),
+      })}
+    />
   </ProfileStack.Navigator>
 );
 
 const AddStackScreen = () => (
   <AddStack.Navigator>
     <AddStack.Screen name="AddNewStreak" component={AddNewStreak}
-          options={({ navigation }) => ({
-            title: '',
-            headerLeft: () => (
-              <HeaderBackButton onPress={() => navigation.goBack()} />
-            ),
-          })}
-             />
+      options={({ navigation }) => ({
+        title: '',
+        headerLeft: () => (
+          <HeaderBackButton onPress={() => navigation.goBack()} />
+        ),
+      })}
+    />
   </AddStack.Navigator>
 );
 const Drawer = createDrawerNavigator();
@@ -108,12 +107,12 @@ const DrawerScreen = () => (
     backgroundColor: '#fff',
     width: 200,
   }}
-  drawerContentOptions={{
-    activeTintColor: '#FFB248',
-    itemStyle: { marginVertical: 5 },
-  }}>
-    <Drawer.Screen name="Home"  component={HomeStackScreen} />
-    <Drawer.Screen name="AddNewStreak" component={AddStackScreen}   options={{ title: "Add a Loop"}} />
+    drawerContentOptions={{
+      activeTintColor: '#FFB248',
+      itemStyle: { marginVertical: 5 },
+    }}>
+    <Drawer.Screen name="Home" component={HomeStackScreen} />
+    <Drawer.Screen name="AddNewStreak" component={AddStackScreen} options={{ title: "Add a Loop" }} />
     <Drawer.Screen name="Profile" component={ProfileStackScreen} />
   </Drawer.Navigator>
 );
@@ -130,14 +129,14 @@ const RootStackScreen = ({ userToken }) => (
         }}
       />
     ) : (
-      <RootStack.Screen
-        name="Auth"
-        component={AuthStackScreen}
-        options={{
-          animationEnabled: false
-        }}
-      />
-    )}
+        <RootStack.Screen
+          name="Auth"
+          component={AuthStackScreen}
+          options={{
+            animationEnabled: false
+          }}
+        />
+      )}
   </RootStack.Navigator>
 );
 
@@ -148,7 +147,7 @@ export default function App() {
   const authContext = React.useMemo(() => {
     return {
       signIn: async data => {
-          firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
+        firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
           storeData('userId', firebasedata.user.uid);
           setUserToken(firebasedata.user.uid);
           const userData = {
@@ -159,7 +158,7 @@ export default function App() {
         })
           .catch(function (error) {
             alert(error.message);
-          })   
+          })
 
         /*   setUserToken('test');
           setIsLoading(false);   */
@@ -202,11 +201,11 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={authContext}>
-     <IconRegistry icons={EvaIconsPack} />
-       <ApplicationProvider {...eva} theme={eva.light} >
-      <NavigationContainer>
-        <RootStackScreen userToken={userToken} />
-      </NavigationContainer>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={eva.light} >
+        <NavigationContainer>
+          <RootStackScreen userToken={userToken} />
+        </NavigationContainer>
       </ApplicationProvider>
     </AuthContext.Provider>
   );
