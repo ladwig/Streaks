@@ -4,10 +4,10 @@ import { Card, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors'
-import { addOneToCounter, updateCounter, deleteOneStreak } from '../databaseActions';
+import { addOneToCounter, deleteOneStreak, minusOneFromCounter } from '../databaseActions';
 import AddNewStreak from '../screens/AddNewStreak';
 
-//Returns the right word as a string for a given interval to display it, 1 -> Day , 2 -> 2 Days , 7 -> 7 Days
+// Returns the right word as a string for a given interval to display it, 1 -> Day , 2 -> 2 Days , 7 -> 7 Days
 const showMeInterval = (interval, counter) => {
   let result = "Interval";
   switch (true) {
@@ -30,11 +30,10 @@ const showMeInterval = (interval, counter) => {
       result = "Week"
       break;
   }
-
   return result;
 }
 
-//Handle a long press and shows an alert with a delete option (calls firebase delete function)
+// Handle a long press and shows an alert with a delete option (calls firebase delete function)
 const handleLongPress = (streakId) => {
   Alert.alert(
     'Delete this Streak',
@@ -45,9 +44,13 @@ const handleLongPress = (streakId) => {
         onPress: () => deleteOneStreak(streakId)
       },
       {
+        text: 'Undo the last press (beta)',
+        onPress: () => minusOneFromCounter(streakId) // Works but needs still some fixes! You aren't able to count again when you are did undo
+      },
+      {
         text: 'Cancel',
         style: 'cancel',
-      }
+      },
     ],
     { cancelable: false },
   );
@@ -58,7 +61,7 @@ export default function StreakCard(props) {
 
   if (props.isAddCard) {
 
-    /* Shows a custom card which links to the AddNewStreak screen */
+    // Shows a custom card which links to the AddNewStreak screen 
     return (
       <Card style={styles.addIconContainer} onPress={() => navigation.navigate(AddNewStreak)}>
         <Ionicons name="ios-add-circle-outline" size={64} color={Colors.mainColor} />
@@ -66,7 +69,7 @@ export default function StreakCard(props) {
     );
   }
 
-  /*  Gets rendered, when you're not allowed to add one to the counter (when you already updated it in the given interval) */
+  //  Gets rendered, when you're not allowed to add one to the counter (when you already updated it in the given interval) 
   if (!props.isEditable && props.streakCounter != 0) {
     return (
       <Card style={styles.streakContainerBlocked} activeOpacity={0.8} onLongPress={() => handleLongPress(props.streakId)}>
@@ -81,6 +84,23 @@ export default function StreakCard(props) {
         </View>
       </Card>
     );
+  }
+
+  if (props.streakCounter == 0) {
+    return (
+      <Card style={styles.streakContainerZero} activeOpacity={0.8} onLongPress={() => handleLongPress(props.streakId)} onPress={() => addOneToCounter(props.streakId)}>
+
+      <View style={styles.streakNameContainer}>
+        <Text style={[styles.streakName, styles.textColor]}>{props.icon} {props.streakName}</Text>
+      </View>
+      <View style={styles.streakCounterContainer}>
+        <Text style={[styles.streakCounter, styles.textColor]}>{props.streakCounter}</Text>
+      </View>
+      <View style={styles.streakIntervalContainer}>
+        <Text style={styles.textColor}>{showMeInterval(props.streakInterval, props.streakCounter)}</Text>
+      </View>
+    </Card>
+  );
   }
 
   /*  Gets rendered, when you're allowed to add one to the counter  */
@@ -112,6 +132,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     height: 120,
     backgroundColor: Colors.green,
+    opacity: 1.0
+  },
+  streakContainerZero: {
+    width: "100%",
+    marginTop: 10,
+    height: 120,
+    backgroundColor: Colors.white,
+    opacity: 0.7
   },
   streakCounterContainer: {
     flexDirection: 'row',

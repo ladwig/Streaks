@@ -8,7 +8,7 @@ import Colors from '../constants/Colors';
 
 const SelectData = [
   'Daily',
-  'Every 2 day',
+  'Every two days',
   'Weekly',
 ];
 
@@ -103,7 +103,7 @@ export default function AddNewStreak({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headline}>Let's add a new Streak</Text>
+      <Text style={styles.headline}>Let's add a new loop</Text>
       <Text style={styles.icon}>{iconSwitcher(streak)}</Text>
       <Animated.View style={{ transform: [{ translateX: shakeAnimation }] }}>
         <Input

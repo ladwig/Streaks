@@ -66,6 +66,24 @@ export const addOneToCounter = (streakId) => {
     })
 }
 
+
+//Substracts one from the counter
+export const minusOneFromCounter = (streakId) => {
+  const user = firebase.auth().currentUser.uid;
+  const db = firebase.database().ref('/streaks/' + user + "/" + streakId);
+  return db
+    .once("value")
+    .then(function (ref) {
+      const counter = ref.val().counter;
+      return {
+        counter: counter - 1,
+        lastUpdate: Date.now()
+      }
+    }).then(function (data) {
+      db.update(data)
+    })
+}
+
 export const updateCounter = (streakId) => {
   const user = firebase.auth().currentUser.uid;
   const db = firebase.database().ref('/streaks/' + user + "/" + streakId);
