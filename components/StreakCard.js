@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     height: 120,
     backgroundColor: Colors.white,
-    opacity: 0.7
+    opacity: 0.6
   },
   streakCounterContainer: {
     flexDirection: 'row',

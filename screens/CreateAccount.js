@@ -32,7 +32,7 @@ export default function SignUp() {
         style={styles.form}
       />
       <Input
-        label="E-Mail"
+        label="E-Mail"p
         placeholder="maxi@online.de"
         value={email}
         onChangeText={setEmail}
@@ -45,6 +45,7 @@ export default function SignUp() {
         onChangeText={setPassword}
         secureTextEntry
         style={styles.form}
+        caption='Should contain at least 8 symbols'
       />
       <Button status='primary' style={styles.form} onPress={() => handleSubmit(email, password, firstName)}>
         Create Account

@@ -13,7 +13,7 @@ export default function SignIn({ navigation }) {
     const { signIn } = React.useContext(AuthContext);
 
     return (
-        <ImageBackground source={require('../assets/bg.jpg')} style={{ width: '100%', height: '100%' }}>
+        <ImageBackground source={require('../assets/bg.jpg')} style={{ width: '100%', height: '100%', backgroundColor: Colors.lightOrange}}>
             <View style={styles.container}>
                 <Input
                     placeholder="E-Mail"

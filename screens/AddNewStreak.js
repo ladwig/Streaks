@@ -53,6 +53,12 @@ const iconSwitcher = (value) => {
     case "book reading":
       icon = "📚"
       break;
+    case "coding":
+    case "entwickeln":
+    case "coden":
+    case "programmieren":
+        icon = "💻"
+        break;
   }
   return icon;
 }
