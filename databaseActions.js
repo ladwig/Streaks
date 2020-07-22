@@ -30,7 +30,7 @@ export const storeStreakData = (cluster, data) => {
   }
 }
 
-//Subscribe to all streaks @ logged in user, runs whenever there is new data
+//Subscribe to all loops/streaks @ logged in user, runs whenever there is new data
 export const subToStreakData = (callback) => {
   const user = firebase.auth().currentUser.uid;
   const db = firebase.database().ref('/streaks/' + user);

@@ -32,7 +32,7 @@ export default function Home({ navigation }) {
   const [streakData, setStreakData] = useState();
   const [firstNameData, setFirstNameData] = useState();
 
-  //Gets called at first render and everytime a streak gets added or updated
+  //Gets called at first render and everytime a streak gets added, deleted or updated
   useEffect(() => {
     subToStreakData(
       function (streakData) {

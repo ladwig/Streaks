@@ -160,8 +160,6 @@ export default function App() {
             alert(error.message);
           })
 
-        /*   setUserToken('test');
-          setIsLoading(false);   */
       },
       signUp: async data => {
         firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(function (firebasedata) {
