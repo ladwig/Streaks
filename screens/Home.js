@@ -7,7 +7,7 @@ import ms from 'ms';
 import StreakCard from '../components/StreakCard';
 
 function modifyStreakData(streakData) {
-
+  if(!(streakData == null || streakData == undefined)) {
   return Object.entries(streakData).map(([itemId, itemData]) => {
     const interval = ms(`${itemData.interval}d`);
     const lastUpdateDayEnd = new Date(itemData.lastUpdate).setHours(24, 0, 0, 0);
@@ -25,6 +25,7 @@ function modifyStreakData(streakData) {
     return [itemId, itemData]
 
   })
+}
 }
 
 export default function Home({ navigation }) {

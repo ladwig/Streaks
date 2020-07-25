@@ -7,8 +7,8 @@ import Colors from '../constants/Colors'
 import Logo from '../components/Logo.js';
 
 export default function SignIn({ navigation }) {
-    const [email, setEmail] = React.useState('ladwig.daniel@icloud.com');
-    const [password, setPassword] = React.useState('12345678');
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
 
     const { signIn } = React.useContext(AuthContext);
 
