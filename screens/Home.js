@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Text, Button, View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { subToStreakData, subToUserData, updateCounter } from '../databaseActions';
 import Colors from '../constants/Colors'
-import { Ionicons } from '@expo/vector-icons';
 import ms from 'ms';
 import StreakCard from '../components/StreakCard';
 
