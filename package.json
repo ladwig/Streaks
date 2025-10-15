@@ -15,7 +15,7 @@
     "@react-navigation/stack": "^5.2.18",
     "@ui-kitten/components": "^5.0.0-alpha.1",
     "@ui-kitten/eva-icons": "^5.0.0",
-    "expo": "~37.0.3",
+    "expo": "~48.0.0",
     "expo-device": "~2.1.0",
     "expo-linear-gradient": "~8.1.0",
     "firebase": "7.9.0",
