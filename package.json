@@ -18,7 +18,7 @@
     "expo": "~37.0.3",
     "expo-device": "~2.1.0",
     "expo-linear-gradient": "~8.1.0",
-    "firebase": "7.9.0",
+    "firebase": "7.24.0",
     "metro": "^0.59.0",
     "ms": "^2.1.2",
     "react": "~16.9.0",
